@@ -32,6 +32,21 @@ FastAPI backend  --->  PostgreSQL (transactional data)
        |          --->  Gemini / OpenAI (LLM + embeddings)
 ```
 
+### RAG query pipeline
+
+<p align="center">
+  <img src="docs/rag-query-pipeline.png" alt="RAG query pipeline" width="720">
+</p>
+
+<details>
+<summary><strong>Retrieval decision flow</strong> (click to expand)</summary>
+
+<p align="center">
+  <img src="docs/retrieval-decision-flow.png" alt="Retrieval decision flow" width="720">
+</p>
+
+</details>
+
 ## Tech stack
 
 | Layer | Technologies |
