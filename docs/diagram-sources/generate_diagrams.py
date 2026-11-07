@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Generate the overview README diagrams as deterministic SVG.
+"""Generate plain technical SVG diagrams for the overview README.
 
-The SVG is authored here with the Python standard library; PNG files are
-rendered separately from the SVG by a browser at 2x scale. The diagrams are
-sized for a GitHub README content width of roughly 900 CSS pixels: the SVGs are
-1200-1300 px wide and use 20-24 px body text, so they remain readable when
-scaled down.
+The rendering is intentionally simple: white background, dark strokes and text,
+rectangular nodes, compact labels and no decorative color system. PNG files are
+rendered from the SVG by a browser at 2x; the 900 px previews are for checking
+GitHub README readability.
+
+The script uses only the Python standard library. It works both in the external
+draft layout (overview-redesign/diagram-sources) and in the published layout
+(docs/diagram-sources).
 """
 
 from __future__ import annotations
@@ -15,31 +18,16 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 HERE = Path(__file__).resolve().parent
-# Works both in the external draft layout (overview-redesign/diagram-sources)
-# and in the published layout (docs/diagram-sources).
 OUT = HERE.parent if HERE.parent.name == "docs" else HERE.parent / "docs"
 OUT.mkdir(parents=True, exist_ok=True)
 
-INK = "#0f2742"
-MUTED = "#475569"
-LINE = "#cbd5e1"
-ARROW = "#475569"
-DASH = "#94a3b8"
+INK = "#111827"
+MUTED = "#374151"
+STROKE = "#111827"
+ARROW = "#111827"
+DASH = "#6b7280"
 WHITE = "#ffffff"
-PAGE = "#f8fafc"
-
-KINDS = {
-    "admin": ("#dbeafe", "#1d4ed8", "ADMIN"),
-    "trainer": ("#dcfce7", "#15803d", "TRAINER"),
-    "student": ("#ede9fe", "#6d28d9", "STUDENT"),
-    "assistant": ("#ccfbf1", "#0d9488", "ASSISTANT"),
-    "platform": ("#ffedd5", "#c2410c", "PLATFORM"),
-    "frontend": ("#e0f2fe", "#0369a1", "FRONTEND"),
-    "backend": ("#ffedd5", "#c2410c", "BACKEND"),
-    "data": ("#ccfbf1", "#0f766e", "DATA"),
-    "external": ("#fae8ff", "#a21caf", "EXTERNAL"),
-    "neutral": ("#f1f5f9", "#64748b", "SYSTEM"),
-}
+FONT = "Helvetica, Arial, sans-serif"
 
 
 def esc(text: str) -> str:
@@ -60,12 +48,12 @@ class SVG:
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
             f'viewBox="0 0 {width} {height}" role="img">',
             "<defs>",
-            '<marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" '
-            'orient="auto" markerUnits="strokeWidth"><path d="M0,0 L12,6 L0,12 z" fill="' + ARROW + '"/></marker>',
-            '<marker id="arrow-dash" markerWidth="12" markerHeight="12" refX="10" refY="6" '
-            'orient="auto" markerUnits="strokeWidth"><path d="M0,0 L12,6 L0,12 z" fill="' + DASH + '"/></marker>',
+            '<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" '
+            'orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="' + ARROW + '"/></marker>',
+            '<marker id="arrow-dash" markerWidth="10" markerHeight="10" refX="8" refY="5" '
+            'orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="' + DASH + '"/></marker>',
             "</defs>",
-            f'<rect width="{width}" height="{height}" fill="{PAGE}"/>',
+            f'<rect width="{width}" height="{height}" fill="{WHITE}"/>',
         ]
 
     def add(self, part: str) -> None:
@@ -73,12 +61,11 @@ class SVG:
 
     def header(self, title: str, subtitle: str) -> None:
         self.add(
-            f'<text x="40" y="52" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="34" font-weight="700" fill="{INK}">{esc(title)}</text>'
+            f'<text x="30" y="34" font-family="{FONT}" font-size="24" font-weight="700" '
+            f'fill="{INK}">{esc(title)}</text>'
         )
         self.add(
-            f'<text x="40" y="84" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="18" fill="{MUTED}">{esc(subtitle)}</text>'
+            f'<text x="30" y="54" font-family="{FONT}" font-size="13" fill="{MUTED}">{esc(subtitle)}</text>'
         )
 
     def box(
@@ -88,66 +75,67 @@ class SVG:
         w: int,
         h: int,
         title: str,
-        body: list[str] | str,
-        kind: str = "neutral",
+        body: str | list[str] = "",
         *,
-        tag: str | None = None,
-        title_size: int = 22,
-        body_size: int = 19,
-        num: int | None = None,
-        dashed: bool = False,
+        title_size: int = 18,
+        body_size: float = 16.5,
     ) -> None:
-        fill, stroke, default_tag = KINDS[kind]
-        pad = 14
-        tag_text = tag or default_tag
-        tag_w = max(56, int(len(tag_text) * 7.8) + 22)
+        pad = 12
         title_lines = wrap(title, max(8, int((w - 2 * pad) / (title_size * 0.55))))
-        body_lines: list[str] = []
         body_items = [body] if isinstance(body, str) else body
+        body_lines: list[str] = []
         body_width = max(10, int((w - 2 * pad) / (body_size * 0.52)))
         for item in body_items:
             body_lines.extend(wrap(item, body_width))
 
-        title_y = y + 52
-        body_y = title_y + len(title_lines) * (title_size + 5) + 6
-        needed = 14 + 23 + len(title_lines) * (title_size + 5) + 6 + len(body_lines) * (body_size + 5) + 14
+        title_y = y + 29
+        body_y = title_y + len(title_lines) * (title_size + 3) + 4
+        needed = 16 + len(title_lines) * (title_size + 3) + 4 + len(body_lines) * (body_size + 4) + 10
         if needed > h:
-            raise ValueError(
-                f"box too short for {title!r}: needs {needed}px, got {h}px"
-            )
+            raise ValueError(f"box too short for {title!r}: needs {needed}px, got {h}px")
 
-        border = 'stroke-dasharray="10 7"' if dashed else ""
         self.add(
-            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" fill="{fill}" '
-            f'stroke="{stroke}" stroke-width="2.5" {border}/>'
-        )
-        self.add(
-            f'<rect x="{x + 13}" y="{y + 10}" width="{tag_w}" height="22" rx="11" '
-            f'fill="{stroke}" opacity="0.13"/>'
-        )
-        self.add(
-            f'<text x="{x + 23}" y="{y + 26}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="11.5" font-weight="700" letter-spacing="0.7" fill="{stroke}">{esc(tag_text)}</text>'
+            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{WHITE}" '
+            f'stroke="{STROKE}" stroke-width="1.4"/>'
         )
         for i, line in enumerate(title_lines):
             self.add(
-                f'<text x="{x + pad}" y="{title_y + i * (title_size + 5)}" '
-                f'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="{title_size}" '
-                f'font-weight="650" fill="{INK}">{esc(line)}</text>'
+                f'<text x="{x + pad}" y="{title_y + i * (title_size + 3)}" '
+                f'font-family="{FONT}" font-size="{title_size}" font-weight="700" '
+                f'fill="{INK}">{esc(line)}</text>'
             )
         for i, line in enumerate(body_lines):
             self.add(
-                f'<text x="{x + pad}" y="{body_y + i * (body_size + 5)}" '
-                f'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="{body_size}" '
-                f'fill="#334155">{esc(line)}</text>'
+                f'<text x="{x + pad}" y="{body_y + i * (body_size + 4)}" '
+                f'font-family="{FONT}" font-size="{body_size}" fill="{MUTED}">{esc(line)}</text>'
             )
-        if num is not None:
-            self.add(f'<circle cx="{x + w - 25}" cy="{y + 25}" r="15" fill="{stroke}"/>')
+
+    def diamond(self, cx: int, cy: int, w: int, h: int, text: str) -> None:
+        lines = wrap(text, max(8, int((w * 0.70) / 9.3)))
+        line_h = 18
+        needed_h = len(lines) * line_h + 18
+        if needed_h > h:
+            raise ValueError(f"diamond too short for {text!r}: needs {needed_h}px, got {h}px")
+        points = f"{cx},{cy - h // 2} {cx + w // 2},{cy} {cx},{cy + h // 2} {cx - w // 2},{cy}"
+        self.add(
+            f'<polygon points="{points}" fill="{WHITE}" stroke="{STROKE}" stroke-width="1.4"/>'
+        )
+        start = cy - (len(lines) - 1) * line_h / 2
+        for i, line in enumerate(lines):
             self.add(
-                f'<text x="{x + w - 25}" y="{y + 30}" text-anchor="middle" '
-                f'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" '
-                f'font-weight="700" fill="{WHITE}">{num}</text>'
+                f'<text x="{cx}" y="{start + i * line_h + 5}" text-anchor="middle" '
+                f'font-family="{FONT}" font-size="16" fill="{INK}">{esc(line)}</text>'
             )
+
+    def label(self, x: float, y: float, text: str, *, size: float = 11.5) -> None:
+        width = max(22, len(text) * size * 0.53 + 8)
+        self.add(
+            f'<rect x="{x - width / 2}" y="{y - 11}" width="{width}" height="16" fill="{WHITE}"/>'
+        )
+        self.add(
+            f'<text x="{x}" y="{y + 1}" text-anchor="middle" font-family="{FONT}" '
+            f'font-size="{size}" fill="{MUTED}">{esc(text)}</text>'
+        )
 
     def arrow(
         self,
@@ -163,15 +151,15 @@ class SVG:
     ) -> None:
         color = DASH if dashed else ARROW
         marker = "arrow-dash" if dashed else "arrow"
-        dash = 'stroke-dasharray="10 7"' if dashed else ""
+        dash = 'stroke-dasharray="6 4"' if dashed else ""
         self.add(
             f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" '
-            f'stroke-width="2.8" stroke-linecap="round" marker-end="url(#{marker})" {dash}/>'
+            f'stroke-width="1.4" marker-end="url(#{marker})" {dash}/>'
         )
         if label:
-            self.tag_label(
+            self.label(
                 label_x if label_x is not None else (x1 + x2) / 2,
-                label_y if label_y is not None else (y1 + y2) / 2 - 12,
+                label_y if label_y is not None else (y1 + y2) / 2 - 5,
                 label,
             )
 
@@ -186,94 +174,40 @@ class SVG:
     ) -> None:
         color = DASH if dashed else ARROW
         marker = "arrow-dash" if dashed else "arrow"
-        dash = 'stroke-dasharray="10 7"' if dashed else ""
-        d = f"M {points[0][0]},{points[0][1]} " + " ".join(
-            f"L {x},{y}" for x, y in points[1:]
-        )
+        dash = 'stroke-dasharray="6 4"' if dashed else ""
+        d = f"M {points[0][0]},{points[0][1]} " + " ".join(f"L {x},{y}" for x, y in points[1:])
         self.add(
-            f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2.8" '
-            f'stroke-linecap="round" stroke-linejoin="round" marker-end="url(#{marker})" {dash}/>'
+            f'<path d="{d}" fill="none" stroke="{color}" stroke-width="1.4" '
+            f'marker-end="url(#{marker})" {dash}/>'
         )
         if label:
-            self.tag_label(
+            self.label(
                 label_x if label_x is not None else points[-1][0],
-                label_y if label_y is not None else points[-1][1] - 14,
+                label_y if label_y is not None else points[-1][1] - 7,
                 label,
             )
 
-    def tag_label(self, x: float, y: float, text: str, *, size: int = 14) -> None:
-        w = max(28, len(text) * 7.4 + 16)
+    def boundary(self, x: int, y: int, w: int, h: int, label: str) -> None:
         self.add(
-            f'<rect x="{x - w / 2}" y="{y - 15}" width="{w}" height="24" rx="12" '
-            f'fill="{WHITE}" stroke="{LINE}" stroke-width="1"/>'
+            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="none" '
+            f'stroke="{DASH}" stroke-width="1.2" stroke-dasharray="5 4"/>'
         )
         self.add(
-            f'<text x="{x}" y="{y + 2}" text-anchor="middle" '
-            f'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="{size}" '
-            f'font-weight="600" fill="{MUTED}">{esc(text)}</text>'
+            f'<text x="{x + 10}" y="{y + 18}" font-family="{FONT}" font-size="13" '
+            f'font-weight="700" fill="{MUTED}">{esc(label)}</text>'
         )
 
-    def phase(self, x: int, y: int, w: int, h: int, label: str) -> None:
+    def section(self, x: int, y: int, text: str) -> None:
         self.add(
-            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="20" fill="{WHITE}" '
-            f'stroke="#e2e8f0" stroke-width="1.5"/>'
-        )
-        self.add(
-            f'<text x="{x + 20}" y="{y + 34}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="22" font-weight="700" fill="{INK}">{esc(label)}</text>'
+            f'<text x="{x}" y="{y}" font-family="{FONT}" font-size="14" font-weight="700" '
+            f'fill="{INK}">{esc(text)}</text>'
         )
 
-    def boundary(self, x: int, y: int, w: int, h: int, label: str, color: str = "#64748b") -> None:
-        self.add(
-            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="22" fill="none" '
-            f'stroke="{color}" stroke-width="2" stroke-dasharray="11 8"/>'
-        )
-        self.add(
-            f'<text x="{x + 18}" y="{y + 27}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="17" font-weight="700" fill="{color}">{esc(label)}</text>'
-        )
-
-    def legend(self, x: int, y: int, items: list[tuple[str, str]]) -> None:
-        cx = x
-        for label, color in items:
-            self.add(
-                f'<rect x="{cx}" y="{y - 16}" width="20" height="20" rx="5" fill="{color}"/>'
-            )
-            self.add(
-                f'<text x="{cx + 28}" y="{y}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-                f'font-size="17" fill="{MUTED}">{esc(label)}</text>'
-            )
-            cx += 30 + len(label) * 8.8 + 30
-
-    def line_legend(self, x: int, y: int) -> None:
-        self.add(
-            f'<line x1="{x}" y1="{y - 6}" x2="{x + 48}" y2="{y - 6}" stroke="{ARROW}" '
-            f'stroke-width="2.8" marker-end="url(#arrow)"/>'
-        )
-        self.add(
-            f'<text x="{x + 56}" y="{y}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="16" fill="{MUTED}">primary flow</text>'
-        )
-        self.add(
-            f'<line x1="{x + 190}" y1="{y - 6}" x2="{x + 238}" y2="{y - 6}" stroke="{DASH}" '
-            f'stroke-width="2.8" stroke-dasharray="9 6" marker-end="url(#arrow-dash)"/>'
-        )
-        self.add(
-            f'<text x="{x + 246}" y="{y}" font-family="Segoe UI, Arial, Helvetica, sans-serif" '
-            f'font-size="16" fill="{MUTED}">optional / manual</text>'
-        )
-
-    def note(self, x: int, y: int, text: str, *, width: int, size: int = 16) -> None:
-        lines = wrap(text, max(10, int((width - 28) / (size * 0.52))))
-        h = 16 + len(lines) * (size + 5)
-        self.add(
-            f'<rect x="{x}" y="{y}" width="{width}" height="{h}" rx="12" fill="{WHITE}" '
-            f'stroke="{LINE}" stroke-width="1.2"/>'
-        )
+    def note(self, x: int, y: int, text: str, *, width: int) -> None:
+        lines = wrap(text, max(20, int(width / 7.0)))
         for i, line in enumerate(lines):
             self.add(
-                f'<text x="{x + 14}" y="{y + 24 + i * (size + 5)}" '
-                f'font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="{size}" '
+                f'<text x="{x}" y="{y + i * 18}" font-family="{FONT}" font-size="12.5" '
                 f'fill="{MUTED}">{esc(line)}</text>'
             )
 
@@ -283,258 +217,205 @@ class SVG:
 
 
 def build_overall() -> None:
-    s = SVG(1300, 1100)
-    s.header(
-        "Course Q&A and Syllabus Agent",
-        "From class setup to cited answers and an optional improvement loop",
-    )
+    s = SVG(1100, 820)
+    s.header("Course Q&A and Syllabus Agent", "Overall workflow: class setup, cited answers and optional improvement")
 
-    s.phase(30, 110, 1240, 260, "1  SET UP & PREPARE")
-    s.phase(30, 400, 1240, 270, "2  ASK & LEARN")
-    s.phase(30, 700, 1240, 230, "3  FOLLOW UP & IMPROVE")
+    s.section(30, 84, "Class setup")
+    s.section(30, 304, "Ask and learn")
+    s.section(30, 524, "Follow up and improve")
 
     row1 = [
-        (50, 250, "Admin provisions class", ["accounts, roles, trainer"], "admin", 1),
-        (330, 280, "Trainer uploads & approves", ["materials and syllabus"], "trainer", 2),
-        (640, 300, "Platform prepares evidence", ["validate, parse, chunk, embed, index"], "platform", 3),
-        (970, 280, "Class knowledge base", ["PostgreSQL metadata; Qdrant vectors"], "data", 4),
+        (30, "Admin: provision accounts/class", "users, roles, trainer"),
+        (290, "Trainer: upload & approve", "materials, syllabus"),
+        (550, "Platform: prepare evidence", "parse, chunk, embed, index"),
+        (810, "Class knowledge base", "PostgreSQL + Qdrant"),
     ]
-    for x, w, title, body, kind, num in row1:
-        s.box(x, 170, w, 170, title, body, kind, num=num, title_size=24, body_size=20)
-    for i in range(len(row1) - 1):
-        x1 = row1[i][0] + row1[i][1]
-        x2 = row1[i + 1][0]
-        s.arrow(x1 + 3, 255, x2 - 3, 255)
+    for x, title, body in row1:
+        s.box(x, 100, 245, 115, title, body)
+    for x in (275, 535, 795):
+        s.arrow(x + 2, 157, x + 17, 157)
 
     row2 = [
-        (50, 250, "Student joins & asks", ["class-scoped question"], "student", 5),
-        (330, 300, "Auth + quota + scope", ["membership, quota, scope gate"], "platform", 6),
-        (660, 320, "Retrieve, rerank, route", ["class material, optional web, no evidence"], "platform", 7),
-        (1010, 240, "Stream cited answer", ["history + feedback"], "student", 8),
+        (30, "Student: join & ask", "class-scoped question"),
+        (290, "Platform: auth, quota, scope", "membership, limit, gate"),
+        (550, "Platform: retrieve, rerank, route", "class, optional web, no evidence"),
+        (810, "Student: receive cited answer", "history + feedback"),
     ]
-    for x, w, title, body, kind, num in row2:
-        s.box(x, 460, w, 170, title, body, kind, num=num, title_size=24, body_size=20)
-    for i in range(len(row2) - 1):
-        x1 = row2[i][0] + row2[i][1]
-        x2 = row2[i + 1][0]
-        s.arrow(x1 + 3, 545, x2 - 3, 545)
+    for x, title, body in row2:
+        s.box(x, 315, 245, 115, title, body)
+    for x in (275, 535, 795):
+        s.arrow(x + 2, 372, x + 17, 372)
 
-    # knowledge base -> retrieval
+    row3 = [
+        (30, 210, "Student: optional ticket", "after confirmation"),
+        (300, 210, "Trainer: reply", "answer + resolve"),
+        (570, 230, "Trainer: review/update", "optional/manual"),
+        (860, 195, "Platform: re-index", "only after update"),
+    ]
+    for x, w, title, body in row3:
+        s.box(x, 535, w, 115, title, body)
+    s.arrow(240, 592, 300, 592)
+    s.arrow(510, 592, 570, 592, dashed=True, label="optional", label_x=540, label_y=580)
+    s.arrow(800, 592, 860, 592, dashed=True, label="if changed", label_x=830, label_y=580)
+
+    # Knowledge base -> retrieval
     s.path_arrow(
-        [(1110, 340), (1110, 378), (820, 378), (820, 460)],
-        dashed=True,
+        [(932, 215), (932, 285), (672, 285), (672, 315)],
         label="class evidence",
-        label_x=960,
-        label_y=368,
+        label_x=800,
+        label_y=275,
     )
-    # answer -> optional ticket
+    # Answer -> optional ticket, routed around the section label.
     s.path_arrow(
-        [(1130, 630), (1130, 674), (28, 674), (28, 820), (50, 820)],
+        [(932, 430), (932, 505), (18, 505), (18, 592), (30, 592)],
         dashed=True,
         label="optional",
         label_x=650,
-        label_y=662,
+        label_y=493,
     )
-
-    row3 = [
-        (50, 230, "Optional teacher ticket", ["student confirms first"], "student", 9),
-        (340, 230, "Trainer replies", ["answer and resolve"], "trainer", 10),
-        (630, 270, "Review gaps or update material", ["optional / manual trainer action"], "trainer", 11),
-        (960, 290, "Re-index updated material", ["only after a material update"], "platform", 12),
-    ]
-    for x, w, title, body, kind, num in row3:
-        s.box(x, 745, w, 160, title, body, kind, num=num, title_size=22, body_size=19)
-    s.arrow(280, 820, 340, 820)
-    s.arrow(570, 820, 630, 820, dashed=True, label="optional", label_x=600, label_y=807)
-    s.arrow(900, 820, 960, 820, dashed=True, label="if updated", label_x=930, label_y=807)
+    # Optional/manual improvement loop.
     s.path_arrow(
-        [(1105, 745), (1105, 690), (1285, 690), (1285, 255), (1250, 255)],
+        [(955, 535), (955, 505), (1070, 505), (1070, 157), (1055, 157)],
         dashed=True,
         label="re-index",
-        label_x=1180,
-        label_y=678,
+        label_x=1015,
+        label_y=493,
     )
 
-    s.legend(
-        50,
-        970,
-        [
-            ("Admin", KINDS["admin"][1]),
-            ("Trainer", KINDS["trainer"][1]),
-            ("Student", KINDS["student"][1]),
-            ("Platform", KINDS["platform"][1]),
-            ("Data", KINDS["data"][1]),
-        ],
-    )
-    s.line_legend(50, 1005)
     s.note(
-        50,
-        1018,
-        "Web search is optional and routing-dependent. Trainer review and material updates are optional/manual; they are not an automatic ticket pipeline.",
-        width=1200,
-        size=16,
+        30,
+        730,
+        "Solid edges are primary flow; dashed edges are optional/manual. Web search is conditional and not used for every question.",
+        width=1040,
     )
     s.finish(OUT / "overall-workflow.svg")
 
 
 def build_architecture() -> None:
-    s = SVG(1300, 1000)
-    s.header(
-        "System architecture",
-        "Two implementation repositories, one class-scoped application",
-    )
+    s = SVG(1100, 800)
+    s.header("System architecture", "Two implementation repositories, one class-scoped application")
 
-    s.boundary(30, 120, 210, 690, "PEOPLE")
-    s.boundary(260, 120, 350, 690, "course-qa-agent-fe  ·  Next.js", "#0369a1")
-    s.boundary(640, 120, 400, 690, "course-qa-agent-be  ·  FastAPI", "#c2410c")
-    s.boundary(1070, 120, 200, 690, "DATA & EXTERNAL")
+    s.add(f'<text x="25" y="92" font-family="{FONT}" font-size="13" font-weight="700" fill="{MUTED}">People</text>')
+    s.boundary(235, 90, 260, 600, "Frontend (Next.js)")
+    s.boundary(535, 90, 290, 600, "Backend (FastAPI)")
+    s.add(f'<text x="855" y="92" font-family="{FONT}" font-size="13" font-weight="700" fill="{MUTED}">Data / external</text>')
 
     actors = [
-        ("Student", ["browser session"], "student", 170),
-        ("Trainer", ["class workspace"], "trainer", 315),
-        ("Teaching assistant", ["where permitted"], "assistant", 460),
-        ("Admin", ["platform settings"], "admin", 605),
+        ("Student", "browser session", 115),
+        ("Trainer", "class workspace", 235),
+        ("Teaching assistant", "where permitted", 355),
+        ("Admin", "platform settings", 475),
     ]
-    for title, body, kind, y in actors:
-        s.box(50, y, 170, 135, title, body, kind, title_size=21, body_size=18)
+    for title, body, y in actors:
+        s.box(35, y, 155, 105, title, body, title_size=17, body_size=15.5)
 
     fe_boxes = [
-        ("App Router pages", ["role-based workspaces"], 170),
-        ("Route middleware + auth guard", ["role cookie + client session"], 315),
-        ("Feature modules", ["chat, materials, tickets, quizzes"], 460),
-        ("API clients", ["REST + SSE · Bearer JWT"], 605),
+        ("App Router pages", "role-based workspaces", 130),
+        ("Route middleware + auth guard", "role cookie + session", 255),
+        ("Feature modules", "chat, materials, tickets, quizzes", 380),
+        ("API clients", "REST/SSE, Bearer JWT", 505),
     ]
     for title, body, y in fe_boxes:
-        s.box(280, y, 310, 140, title, body, "frontend", title_size=22, body_size=19)
+        s.box(250, y, 230, 110, title, body, title_size=17, body_size=15.5)
 
     be_boxes = [
-        ("API routers", ["auth, chat, documents, quizzes,", "tickets, admin"], 170),
-        ("Auth, RBAC & class scope", ["JWT · membership · role checks"], 315),
-        ("RAG + ingestion + tickets + quizzes", ["service layer"], 460),
-        ("Admin settings & system health", ["keys, thresholds, email, probes"], 605),
+        ("API routers", "auth, chat, documents, quizzes, tickets, admin", 130),
+        ("Auth, RBAC & class scope", "JWT, membership, role checks", 255),
+        ("RAG + ingestion + tickets + quizzes", "service layer", 380),
+        ("Admin settings & system health", "keys, thresholds, email, probes", 505),
     ]
     for title, body, y in be_boxes:
-        s.box(660, y, 360, 140, title, body, "backend", title_size=22, body_size=19)
+        s.box(550, y, 260, 110, title, body, title_size=17, body_size=15.5)
 
     ext_boxes = [
-        ("PostgreSQL", ["relational"], "data", 170),
-        ("Qdrant", ["vectors"], "data", 280),
-        ("Gemini", ["AI model calls"], "external", 390),
-        ("SerpApi", ["optional web"], "external", 500),
-        ("SMTP", ["optional email"], "external", 610),
+        ("PostgreSQL", "relational data", 130),
+        ("Qdrant", "vector index", 220),
+        ("Gemini", "AI model calls", 310),
+        ("SerpApi", "optional web", 400),
+        ("SMTP", "optional email", 490),
     ]
-    for title, body, kind, y in ext_boxes:
-        s.box(1090, y, 160, 105, title, body, kind, title_size=19, body_size=17)
+    for title, body, y in ext_boxes:
+        s.box(870, y, 200, 78, title, body, title_size=16, body_size=14.5)
 
-    s.arrow(240, 470, 260, 470, label="browser", label_x=250, label_y=458)
-    s.arrow(610, 470, 640, 470, label="REST + SSE", label_x=625, label_y=458)
+    s.arrow(190, 320, 235, 320, label="browser", label_x=212, label_y=308)
+    s.arrow(495, 320, 535, 320, label="HTTP/SSE", label_x=515, label_y=308)
 
-    s.add(f'<line x1="1040" y1="470" x2="1055" y2="470" stroke="{ARROW}" stroke-width="2.8"/>')
-    s.add(f'<line x1="1055" y1="215" x2="1055" y2="655" stroke="{ARROW}" stroke-width="2.8"/>')
-    for y in (215, 325, 435, 545, 655):
-        s.arrow(1055, y, 1090, y)
+    s.add(f'<line x1="825" y1="320" x2="845" y2="320" stroke="{ARROW}" stroke-width="1.4"/>')
+    s.add(f'<line x1="845" y1="169" x2="845" y2="529" stroke="{ARROW}" stroke-width="1.4"/>')
+    for y in (169, 259, 349, 439, 529):
+        s.arrow(845, y, 870, y)
 
-    s.legend(
-        50,
-        875,
-        [
-            ("People", "#64748b"),
-            ("Frontend", KINDS["frontend"][1]),
-            ("Backend", KINDS["backend"][1]),
-            ("Data", KINDS["data"][1]),
-            ("External", KINDS["external"][1]),
-        ],
-    )
-    s.line_legend(50, 910)
     s.note(
-        50,
-        923,
-        "SerpApi and SMTP are optional integrations. Web search is routing-dependent and is not used for every question.",
-        width=1200,
-        size=16,
+        30,
+        730,
+        "SerpApi and SMTP are optional. Web search is conditional and is not used for every question.",
+        width=1040,
     )
     s.finish(OUT / "architecture.svg")
 
 
 def build_rag() -> None:
-    s = SVG(1200, 2000)
+    s = SVG(1000, 1450)
     s.header(
         "Question answering and optional web search",
-        "The main RAG route; quick predefined replies and code-help shortcuts are omitted for readability",
+        "Main RAG route; quick replies and code-help shortcuts are omitted",
     )
 
-    main = [
-        (110, 120, "Student asks a class-scoped question", ["question + class_id"], "student", 1),
-        (250, 120, "Authenticate, verify class, check quota", ["401 / 403 / 429 stop here"], "platform", 2),
-        (390, 120, "Scope gate + follow-up rewrite", ["parallel; gate fails open; rewrite falls back"], "platform", 3),
-        (540, 120, "Class-filtered retrieval", ["Qdrant · class_id · live documents"], "platform", 4),
-        (680, 120, "Low or empty vector score?", ["skip rerank; continue routing"], "platform", 5),
-        (820, 120, "Cross-Encoder rerank", ["top K class passages"], "platform", 6),
-        (960, 140, "Routing policy", ["scope + score + syllabus; strong/roadmap -> class", "partial -> class + web; low/empty -> web/no evidence"], "platform", 7),
-    ]
-    for y, h, title, body, kind, num in main:
-        s.box(40, y, 620, h, title, body, kind, num=num, title_size=24, body_size=21)
+    s.box(30, 80, 550, 75, "Student asks a class-scoped question", "question + class_id")
+    s.arrow(305, 155, 305, 170)
+    s.box(30, 170, 550, 75, "Authenticate, verify class, check quota", "401 / 403 / 429 stop")
+    s.arrow(305, 245, 305, 260)
+    s.box(30, 260, 550, 80, "Scope gate + follow-up rewrite", "parallel; fail-open; rewrite fallback")
+    s.arrow(305, 340, 305, 345)
+    s.diamond(305, 390, 240, 90, "Out of scope?")
+    s.box(610, 355, 360, 75, "Refuse out-of-scope", "no retrieval")
+    s.arrow(425, 390, 610, 390, label="Out of scope", label_x=518, label_y=378)
+    s.arrow(305, 435, 305, 470, label="Continue", label_x=326, label_y=455)
 
-    # Main vertical links.
-    s.arrow(350, 230, 350, 246)
-    s.arrow(350, 370, 350, 386, label="yes", label_x=368, label_y=376)
-    s.arrow(350, 510, 350, 536, label="Continue", label_x=368, label_y=526)
-    s.arrow(350, 660, 350, 676)
-    s.arrow(350, 800, 350, 816, label="no", label_x=368, label_y=802)
-    s.arrow(350, 940, 350, 956)
+    s.box(30, 470, 550, 75, "Class-filtered retrieval", "class_id; live documents")
+    s.arrow(305, 545, 305, 555)
+    s.diamond(305, 600, 260, 90, "Low / empty score?")
+    s.arrow(305, 645, 305, 690, label="Continue", label_x=326, label_y=665)
+    s.box(30, 690, 550, 75, "Cross-Encoder rerank", "top K class passages")
+    s.arrow(305, 765, 305, 790)
+    s.box(30, 790, 550, 75, "Routing policy", "score + scope + syllabus")
 
-    # Out-of-scope branch.
-    s.box(780, 390, 380, 120, "Refuse out-of-scope", ["no retrieval"], "neutral", tag="OUTCOME", title_size=22, body_size=19)
-    s.arrow(660, 450, 780, 450, label="Out of scope", label_x=720, label_y=438)
-
-    # Low/empty score skips the reranker and still goes to routing.
+    # Low/empty evidence bypasses the reranker and still reaches routing.
     s.path_arrow(
-        [(660, 740), (690, 740), (690, 1020), (660, 1020)],
+        [(435, 600), (590, 600), (590, 827), (580, 827)],
         label="Low / empty",
-        label_x=710,
-        label_y=900,
+        label_x=590,
+        label_y=660,
     )
 
     outcomes = [
-        (730, 1120, 430, 120, "Class answer", ["strong score or syllabus roadmap"], "data", 8),
-        (730, 1260, 430, 140, "Class + optional web", ["partial score; fall back to class if web empty"], "data", 9),
-        (730, 1420, 430, 140, "Optional web search", ["web enabled + configured only", "empty result -> no evidence"], "external", 10),
-        (730, 1600, 430, 120, "No evidence", ["explicit insufficient-source response"], "neutral", 11),
+        (610, 880, 360, 75, "Class answer", "strong score or roadmap"),
+        (610, 970, 360, 95, "Class + optional web", "partial; class fallback if web empty"),
+        (610, 1080, 360, 80, "Web search (conditional)", "only if provider configured"),
+        (610, 1180, 360, 75, "No evidence", "explicit response"),
     ]
-    for x, y, w, h, title, body, kind, num in outcomes:
-        s.box(x, y, w, h, title, body, kind, num=num, title_size=22, body_size=19)
+    for x, y, w, h, title, body in outcomes:
+        s.box(x, y, w, h, title, body, title_size=17, body_size=15.5)
 
-    s.arrow(660, 1000, 730, 1180, label="strong", label_x=695, label_y=1090)
-    s.arrow(660, 1020, 730, 1330, label="partial", label_x=695, label_y=1240)
-    s.arrow(660, 1040, 730, 1490, label="low/empty", label_x=695, label_y=1390)
-    s.arrow(945, 1560, 945, 1600, label="no web / no results", label_x=945, label_y=1580)
+    s.arrow(580, 810, 610, 917, label="strong", label_x=595, label_y=900)
+    s.arrow(580, 825, 610, 1017, label="partial", label_x=595, label_y=1000)
+    s.arrow(580, 840, 610, 1120, label="low", label_x=595, label_y=1103)
+    s.arrow(790, 1160, 790, 1180, label="no provider/results", label_x=790, label_y=1170)
 
-    # Outcomes that produce sources feed the grounded answer.
-    s.add(f'<line x1="1160" y1="1180" x2="1180" y2="1180" stroke="{ARROW}" stroke-width="2.8"/>')
-    s.add(f'<line x1="1160" y1="1330" x2="1180" y2="1330" stroke="{ARROW}" stroke-width="2.8"/>')
-    s.add(f'<line x1="1160" y1="1490" x2="1180" y2="1490" stroke="{ARROW}" stroke-width="2.8"/>')
-    s.add(f'<line x1="1180" y1="1180" x2="1180" y2="1800" stroke="{ARROW}" stroke-width="2.8"/>')
-    s.arrow(1180, 1800, 1160, 1800)
+    # Only class/web source outcomes feed generation.
+    s.add(f'<line x1="970" y1="917" x2="985" y2="917" stroke="{ARROW}" stroke-width="1.4"/>')
+    s.add(f'<line x1="970" y1="1017" x2="985" y2="1017" stroke="{ARROW}" stroke-width="1.4"/>')
+    s.add(f'<line x1="970" y1="1120" x2="985" y2="1120" stroke="{ARROW}" stroke-width="1.4"/>')
+    s.add(f'<line x1="985" y1="917" x2="985" y2="1315" stroke="{ARROW}" stroke-width="1.4"/>')
+    s.arrow(985, 1315, 960, 1315)
 
-    s.box(40, 1740, 1120, 120, "Generate grounded answer + stream it", ["citations, suggestions, history, feedback; only numbered sources"], "external", tag="DELIVERY", title_size=24, body_size=21, num=12)
+    s.box(30, 1280, 930, 75, "Generate grounded answer and stream it", "citations, suggestions, history, feedback")
 
-    s.legend(
-        40,
-        1900,
-        [
-            ("Student", KINDS["student"][1]),
-            ("Platform", KINDS["platform"][1]),
-            ("Class evidence", KINDS["data"][1]),
-            ("Web / generation", KINDS["external"][1]),
-            ("Outcome", "#64748b"),
-        ],
-    )
     s.note(
-        40,
-        1925,
-        "Web search is optional and appears only on routes that permit it. Low or empty class evidence is not an automatic final answer; it still goes through routing.",
-        width=1120,
-        size=16,
+        30,
+        1390,
+        "Low or empty class evidence continues through routing; web search is conditional and no-evidence is an explicit response.",
+        width=940,
     )
     s.finish(OUT / "rag-and-web-workflow.svg")
 

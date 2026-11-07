@@ -1,149 +1,84 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2000" viewBox="0 0 1200 2000" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1450" viewBox="0 0 1000 1450" role="img">
 <defs>
-<marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L12,6 L0,12 z" fill="#475569"/></marker>
-<marker id="arrow-dash" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L12,6 L0,12 z" fill="#94a3b8"/></marker>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#111827"/></marker>
+<marker id="arrow-dash" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/></marker>
 </defs>
-<rect width="1200" height="2000" fill="#f8fafc"/>
-<text x="40" y="52" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#0f2742">Question answering and optional web search</text>
-<text x="40" y="84" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="18" fill="#475569">The main RAG route; quick predefined replies and code-help shortcuts are omitted for readability</text>
-<rect x="40" y="110" width="620" height="120" rx="14" fill="#ede9fe" stroke="#6d28d9" stroke-width="2.5" />
-<rect x="53" y="120" width="76" height="22" rx="11" fill="#6d28d9" opacity="0.13"/>
-<text x="63" y="136" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#6d28d9">STUDENT</text>
-<text x="54" y="162" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Student asks a class-scoped question</text>
-<text x="54" y="197" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">question + class_id</text>
-<circle cx="635" cy="135" r="15" fill="#6d28d9"/>
-<text x="635" y="140" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">1</text>
-<rect x="40" y="250" width="620" height="120" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="260" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="276" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="302" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Authenticate, verify class, check quota</text>
-<text x="54" y="337" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">401 / 403 / 429 stop here</text>
-<circle cx="635" cy="275" r="15" fill="#c2410c"/>
-<text x="635" y="280" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">2</text>
-<rect x="40" y="390" width="620" height="120" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="400" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="416" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="442" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Scope gate + follow-up rewrite</text>
-<text x="54" y="477" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">parallel; gate fails open; rewrite falls back</text>
-<circle cx="635" cy="415" r="15" fill="#c2410c"/>
-<text x="635" y="420" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">3</text>
-<rect x="40" y="540" width="620" height="120" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="550" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="566" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="592" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Class-filtered retrieval</text>
-<text x="54" y="627" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">Qdrant · class_id · live documents</text>
-<circle cx="635" cy="565" r="15" fill="#c2410c"/>
-<text x="635" y="570" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">4</text>
-<rect x="40" y="680" width="620" height="120" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="690" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="706" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="732" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Low or empty vector score?</text>
-<text x="54" y="767" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">skip rerank; continue routing</text>
-<circle cx="635" cy="705" r="15" fill="#c2410c"/>
-<text x="635" y="710" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">5</text>
-<rect x="40" y="820" width="620" height="120" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="830" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="846" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="872" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Cross-Encoder rerank</text>
-<text x="54" y="907" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">top K class passages</text>
-<circle cx="635" cy="845" r="15" fill="#c2410c"/>
-<text x="635" y="850" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">6</text>
-<rect x="40" y="960" width="620" height="140" rx="14" fill="#ffedd5" stroke="#c2410c" stroke-width="2.5" />
-<rect x="53" y="970" width="84" height="22" rx="11" fill="#c2410c" opacity="0.13"/>
-<text x="63" y="986" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#c2410c">PLATFORM</text>
-<text x="54" y="1012" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Routing policy</text>
-<text x="54" y="1047" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">scope + score + syllabus; strong/roadmap -&gt; class</text>
-<text x="54" y="1073" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">partial -&gt; class + web; low/empty -&gt; web/no evidence</text>
-<circle cx="635" cy="985" r="15" fill="#c2410c"/>
-<text x="635" y="990" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">7</text>
-<line x1="350" y1="230" x2="350" y2="246" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<line x1="350" y1="370" x2="350" y2="386" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="348.9" y="361" width="38.2" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="368" y="378" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">yes</text>
-<line x1="350" y1="510" x2="350" y2="536" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="330.4" y="511" width="75.2" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="368" y="528" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">Continue</text>
-<line x1="350" y1="660" x2="350" y2="676" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<line x1="350" y1="800" x2="350" y2="816" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="352.6" y="787" width="30.8" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="368" y="804" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">no</text>
-<line x1="350" y1="940" x2="350" y2="956" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="780" y="390" width="380" height="120" rx="14" fill="#f1f5f9" stroke="#64748b" stroke-width="2.5" />
-<rect x="793" y="400" width="76" height="22" rx="11" fill="#64748b" opacity="0.13"/>
-<text x="803" y="416" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#64748b">OUTCOME</text>
-<text x="794" y="442" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="650" fill="#0f2742">Refuse out-of-scope</text>
-<text x="794" y="475" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">no retrieval</text>
-<line x1="660" y1="450" x2="780" y2="450" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="667.6" y="423" width="104.80000000000001" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="720" y="440" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">Out of scope</text>
-<path d="M 660,740 L 690,740 L 690,1020 L 660,1020" fill="none" stroke="#475569" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)" />
-<rect x="661.3" y="885" width="97.4" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="710" y="902" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">Low / empty</text>
-<rect x="730" y="1120" width="430" height="120" rx="14" fill="#ccfbf1" stroke="#0f766e" stroke-width="2.5" />
-<rect x="743" y="1130" width="56" height="22" rx="11" fill="#0f766e" opacity="0.13"/>
-<text x="753" y="1146" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#0f766e">DATA</text>
-<text x="744" y="1172" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="650" fill="#0f2742">Class answer</text>
-<text x="744" y="1205" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">strong score or syllabus roadmap</text>
-<circle cx="1135" cy="1145" r="15" fill="#0f766e"/>
-<text x="1135" y="1150" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">8</text>
-<rect x="730" y="1260" width="430" height="140" rx="14" fill="#ccfbf1" stroke="#0f766e" stroke-width="2.5" />
-<rect x="743" y="1270" width="56" height="22" rx="11" fill="#0f766e" opacity="0.13"/>
-<text x="753" y="1286" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#0f766e">DATA</text>
-<text x="744" y="1312" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="650" fill="#0f2742">Class + optional web</text>
-<text x="744" y="1345" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">partial score; fall back to class if web</text>
-<text x="744" y="1369" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">empty</text>
-<circle cx="1135" cy="1285" r="15" fill="#0f766e"/>
-<text x="1135" y="1290" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">9</text>
-<rect x="730" y="1420" width="430" height="140" rx="14" fill="#fae8ff" stroke="#a21caf" stroke-width="2.5" />
-<rect x="743" y="1430" width="84" height="22" rx="11" fill="#a21caf" opacity="0.13"/>
-<text x="753" y="1446" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#a21caf">EXTERNAL</text>
-<text x="744" y="1472" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="650" fill="#0f2742">Optional web search</text>
-<text x="744" y="1505" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">web enabled + configured only</text>
-<text x="744" y="1529" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">empty result -&gt; no evidence</text>
-<circle cx="1135" cy="1445" r="15" fill="#a21caf"/>
-<text x="1135" y="1450" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">10</text>
-<rect x="730" y="1600" width="430" height="120" rx="14" fill="#f1f5f9" stroke="#64748b" stroke-width="2.5" />
-<rect x="743" y="1610" width="68" height="22" rx="11" fill="#64748b" opacity="0.13"/>
-<text x="753" y="1626" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#64748b">SYSTEM</text>
-<text x="744" y="1652" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="650" fill="#0f2742">No evidence</text>
-<text x="744" y="1685" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="19" fill="#334155">explicit insufficient-source response</text>
-<circle cx="1135" cy="1625" r="15" fill="#64748b"/>
-<text x="1135" y="1630" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">11</text>
-<line x1="660" y1="1000" x2="730" y2="1180" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="664.8" y="1075" width="60.400000000000006" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="695" y="1092" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">strong</text>
-<line x1="660" y1="1020" x2="730" y2="1330" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="661.1" y="1225" width="67.80000000000001" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="695" y="1242" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">partial</text>
-<line x1="660" y1="1040" x2="730" y2="1490" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="653.7" y="1375" width="82.60000000000001" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="695" y="1392" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">low/empty</text>
-<line x1="945" y1="1560" x2="945" y2="1600" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="866.7" y="1565" width="156.6" height="24" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
-<text x="945" y="1582" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#475569">no web / no results</text>
-<line x1="1160" y1="1180" x2="1180" y2="1180" stroke="#475569" stroke-width="2.8"/>
-<line x1="1160" y1="1330" x2="1180" y2="1330" stroke="#475569" stroke-width="2.8"/>
-<line x1="1160" y1="1490" x2="1180" y2="1490" stroke="#475569" stroke-width="2.8"/>
-<line x1="1180" y1="1180" x2="1180" y2="1800" stroke="#475569" stroke-width="2.8"/>
-<line x1="1180" y1="1800" x2="1160" y2="1800" stroke="#475569" stroke-width="2.8" stroke-linecap="round" marker-end="url(#arrow)" />
-<rect x="40" y="1740" width="1120" height="120" rx="14" fill="#fae8ff" stroke="#a21caf" stroke-width="2.5" />
-<rect x="53" y="1750" width="84" height="22" rx="11" fill="#a21caf" opacity="0.13"/>
-<text x="63" y="1766" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.7" fill="#a21caf">DELIVERY</text>
-<text x="54" y="1792" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="24" font-weight="650" fill="#0f2742">Generate grounded answer + stream it</text>
-<text x="54" y="1827" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="21" fill="#334155">citations, suggestions, history, feedback; only numbered sources</text>
-<circle cx="1135" cy="1765" r="15" fill="#a21caf"/>
-<text x="1135" y="1770" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#ffffff">12</text>
-<rect x="40" y="1884" width="20" height="20" rx="5" fill="#6d28d9"/>
-<text x="68" y="1900" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="17" fill="#475569">Student</text>
-<rect x="161.60000000000002" y="1884" width="20" height="20" rx="5" fill="#c2410c"/>
-<text x="189.60000000000002" y="1900" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="17" fill="#475569">Platform</text>
-<rect x="292.0" y="1884" width="20" height="20" rx="5" fill="#0f766e"/>
-<text x="320.0" y="1900" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="17" fill="#475569">Class evidence</text>
-<rect x="475.20000000000005" y="1884" width="20" height="20" rx="5" fill="#a21caf"/>
-<text x="503.20000000000005" y="1900" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="17" fill="#475569">Web / generation</text>
-<rect x="676.0" y="1884" width="20" height="20" rx="5" fill="#64748b"/>
-<text x="704.0" y="1900" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="17" fill="#475569">Outcome</text>
-<rect x="40" y="1925" width="1120" height="58" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-<text x="54" y="1949" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" fill="#475569">Web search is optional and appears only on routes that permit it. Low or empty class evidence is not an automatic final answer; it</text>
-<text x="54" y="1970" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" fill="#475569">still goes through routing.</text>
+<rect width="1000" height="1450" fill="#ffffff"/>
+<text x="30" y="34" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#111827">Question answering and optional web search</text>
+<text x="30" y="54" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#374151">Main RAG route; quick replies and code-help shortcuts are omitted</text>
+<rect x="30" y="80" width="550" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="109" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Student asks a class-scoped question</text>
+<text x="42" y="134.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">question + class_id</text>
+<line x1="305" y1="155" x2="305" y2="170" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="30" y="170" width="550" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="199" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Authenticate, verify class, check quota</text>
+<text x="42" y="224.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">401 / 403 / 429 stop</text>
+<line x1="305" y1="245" x2="305" y2="260" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="30" y="260" width="550" height="80" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="289" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Scope gate + follow-up rewrite</text>
+<text x="42" y="314.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">parallel; fail-open; rewrite fallback</text>
+<line x1="305" y1="340" x2="305" y2="345" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<polygon points="305,345 425,390 305,435 185,390" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="305" y="395.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#111827">Out of scope?</text>
+<rect x="610" y="355" width="360" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="622" y="384" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Refuse out-of-scope</text>
+<text x="622" y="409.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">no retrieval</text>
+<line x1="425" y1="390" x2="610" y2="390" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="477.43" y="367" width="81.14" height="16" fill="#ffffff"/>
+<text x="518" y="379" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">Out of scope</text>
+<line x1="305" y1="435" x2="305" y2="470" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="297.62" y="444" width="56.760000000000005" height="16" fill="#ffffff"/>
+<text x="326" y="456" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">Continue</text>
+<rect x="30" y="470" width="550" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="499" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Class-filtered retrieval</text>
+<text x="42" y="524.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">class_id; live documents</text>
+<line x1="305" y1="545" x2="305" y2="555" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<polygon points="305,555 435,600 305,645 175,600" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="305" y="605.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="16" fill="#111827">Low / empty score?</text>
+<line x1="305" y1="645" x2="305" y2="690" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="297.62" y="654" width="56.760000000000005" height="16" fill="#ffffff"/>
+<text x="326" y="666" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">Continue</text>
+<rect x="30" y="690" width="550" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="719" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Cross-Encoder rerank</text>
+<text x="42" y="744.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">top K class passages</text>
+<line x1="305" y1="765" x2="305" y2="790" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="30" y="790" width="550" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="819" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Routing policy</text>
+<text x="42" y="844.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">score + scope + syllabus</text>
+<path d="M 435,600 L 590,600 L 590,827 L 580,827" fill="none" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="552.4775" y="649" width="75.045" height="16" fill="#ffffff"/>
+<text x="590" y="661" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">Low / empty</text>
+<rect x="610" y="880" width="360" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="622" y="909" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#111827">Class answer</text>
+<text x="622" y="933.0" font-family="Helvetica, Arial, sans-serif" font-size="15.5" fill="#374151">strong score or roadmap</text>
+<rect x="610" y="970" width="360" height="95" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="622" y="999" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#111827">Class + optional web</text>
+<text x="622" y="1023.0" font-family="Helvetica, Arial, sans-serif" font-size="15.5" fill="#374151">partial; class fallback if web empty</text>
+<rect x="610" y="1080" width="360" height="80" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="622" y="1109" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#111827">Web search (conditional)</text>
+<text x="622" y="1133.0" font-family="Helvetica, Arial, sans-serif" font-size="15.5" fill="#374151">only if provider configured</text>
+<rect x="610" y="1180" width="360" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="622" y="1209" font-family="Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#111827">No evidence</text>
+<text x="622" y="1233.0" font-family="Helvetica, Arial, sans-serif" font-size="15.5" fill="#374151">explicit response</text>
+<line x1="580" y1="810" x2="610" y2="917" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="572.715" y="889" width="44.57" height="16" fill="#ffffff"/>
+<text x="595" y="901" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">strong</text>
+<line x1="580" y1="825" x2="610" y2="1017" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="569.6675" y="989" width="50.665" height="16" fill="#ffffff"/>
+<text x="595" y="1001" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">partial</text>
+<line x1="580" y1="840" x2="610" y2="1120" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="581.8575" y="1092" width="26.285" height="16" fill="#ffffff"/>
+<text x="595" y="1104" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">low</text>
+<line x1="790" y1="1160" x2="790" y2="1180" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="728.0975" y="1159" width="123.805" height="16" fill="#ffffff"/>
+<text x="790" y="1171" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11.5" fill="#374151">no provider/results</text>
+<line x1="970" y1="917" x2="985" y2="917" stroke="#111827" stroke-width="1.4"/>
+<line x1="970" y1="1017" x2="985" y2="1017" stroke="#111827" stroke-width="1.4"/>
+<line x1="970" y1="1120" x2="985" y2="1120" stroke="#111827" stroke-width="1.4"/>
+<line x1="985" y1="917" x2="985" y2="1315" stroke="#111827" stroke-width="1.4"/>
+<line x1="985" y1="1315" x2="960" y2="1315" stroke="#111827" stroke-width="1.4" marker-end="url(#arrow)" />
+<rect x="30" y="1280" width="930" height="75" fill="#ffffff" stroke="#111827" stroke-width="1.4"/>
+<text x="42" y="1309" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#111827">Generate grounded answer and stream it</text>
+<text x="42" y="1334.0" font-family="Helvetica, Arial, sans-serif" font-size="16.5" fill="#374151">citations, suggestions, history, feedback</text>
+<text x="30" y="1390" font-family="Helvetica, Arial, sans-serif" font-size="12.5" fill="#374151">Low or empty class evidence continues through routing; web search is conditional and no-evidence is an explicit response.</text>
 </svg>

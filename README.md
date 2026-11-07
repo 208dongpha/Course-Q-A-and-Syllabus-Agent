@@ -131,4 +131,4 @@ This overview repository has no runnable application code. Start the backend fir
 
 ## About the project
 
-This overview is kept separate from the two implementation repositories so the product story, architecture and diagrams stay readable without duplicating their setup or API documentation. The diagrams use English labels and a consistent role/system legend.
+This overview is kept separate from the two implementation repositories so the product story, architecture and diagrams stay readable without duplicating their setup or API documentation. The diagrams use a plain technical style; solid edges show primary flow and dashed edges show optional or manual paths.
