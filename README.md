@@ -45,10 +45,13 @@ Sign-in is required. Accounts are created by administrators; the product does no
 8. If the student confirms that the answer is not enough, they can open a ticket. The trainer replies, and recurring questions become content-gap signals for improving the material.
 
 <p align="center">
-  <img src="docs/overall-workflow.png" alt="End-to-end workflow: admin provisions users and classes, trainer uploads and approves materials, the platform indexes them, a student asks a class-scoped question and receives a cited answer, and an optional teacher ticket improves the material." width="100%">
+  <img src="docs/system-workflow.png" alt="High-level system workflow: admin sets up classes, trainer uploads and approves materials, the platform indexes them, students receive cited answers, and an optional teacher follow-up improves materials." width="100%">
 </p>
 
-<p align="center"><sub><a href="docs/overall-workflow.svg">Open the vector version</a></sub></p>
+<p align="center"><sub>High-level workflow: web search is conditional; trainer review and material updates are manual. Detailed routing is below.</sub></p>
+
+<details>
+<summary><strong>Technical reference: system architecture</strong></summary>
 
 ## Architecture
 
@@ -59,6 +62,11 @@ The frontend is a Next.js App Router application. It calls the FastAPI backend o
 </p>
 
 <p align="center"><sub><a href="docs/architecture.svg">Open the vector version</a></sub></p>
+
+</details>
+
+<details>
+<summary><strong>Technical reference: question answering and optional web search</strong></summary>
 
 ## Question answering in detail
 
@@ -78,6 +86,8 @@ The important branches are:
 </p>
 
 <p align="center"><sub><a href="docs/rag-and-web-workflow.svg">Open the vector version</a></sub></p>
+
+</details>
 
 ## What the product includes
 
@@ -131,4 +141,4 @@ This overview repository has no runnable application code. Start the backend fir
 
 ## About the project
 
-This overview is kept separate from the two implementation repositories so the product story, architecture and diagrams stay readable without duplicating their setup or API documentation. The diagrams use a plain technical style; solid edges show primary flow and dashed edges show optional or manual paths.
+This overview is kept separate from the two implementation repositories so the product story, architecture and diagrams stay readable without duplicating their setup or API documentation. The high-level workflow is an overview illustration; the expandable references use plain technical diagrams, with solid edges for primary flow and dashed edges for optional or manual paths.
